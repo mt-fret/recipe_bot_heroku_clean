@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Delete List{% endblock %}
+
+{% block content %}
+    <div class="flex justify-center">
+        <form method="post">
+            {% csrf_token %}
+            <div class="px-5 py-3 bg-white rounded-xl mt-6">
+                <p>Are you sure you want to delete shopping list for</p>
+                <p class="mt-3"><b>'{{ shoppinglist.recipe.name }}'</b></p>
+                <p class="mt-6">This action cannot be undone!</p>
+            </div>
+            <div class="flex justify-center gap-5 mt-6">
+                <a href="{% url 'shopping_list' %}" class="px-5 py-3 bg-teal-700 hover:bg-teal-800 rounded-xl">< Back</a>
+                <input type="submit" class="px-5 py-3 bg-red-700 hover:bg-red-800 rounded-xl" value="Confirm">
+            </div>
+        </form>
+    </div>
+{% endblock %}

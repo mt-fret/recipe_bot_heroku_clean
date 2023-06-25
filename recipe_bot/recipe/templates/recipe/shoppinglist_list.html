@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Create{% endblock %}
+
+{% block content %}
+<div class="p-5 lg:p-10 text-center">
+    <h1 class="text-2xl lg:text-4xl">Shopping Lists</h1>
+</div>
+    <form method="post" action="{% url 'shopping_pdf' %}">
+    {% csrf_token %}
+    <div class="grid grid-cols-4 gap-5 ml-5 mr-5">
+    {% for shopping_list in shopping_lists %}
+        <div>
+            <a href="{% url 'recipe_detail' pk=shopping_list.recipe.id %}">
+                <div class="px-5 py-3 rounded-xl bg-white hover:bg-orange-300 hover:shadow-lg hover:shadow-black/30">
+                    For<br/>
+                    <b>{{ shopping_list.recipe.name }}</b><br/>
+                    you need:
+                </div>
+            </a>
+            <div class="px-5 py-3 rounded-xl bg-white mt-6">
+            {% for ing in shopping_list.missing_ingredients.all %}
+                <div>
+                <p>{{ ing }}</p>
+                </div>
+            {% endfor %}
+            </div>
+
+            <div class="px-5 py-3 rounded-xl bg-white mt-6 flex justify-between ">
+                <div class="px-2 py-1 bg-teal-700 rounded-xl">
+                <label>
+                <input type="checkbox" name="shopping_list_to_pdf" value="{{ shopping_list.id }}">
+                Add to PDF
+                </label>
+                </div>
+                <div>
+                    <a href="{% url 'shoppinglist_delete' pk=shopping_list.id %}">
+                        <p class="px-2 py-1 rounded-xl bg-red-500">Delete List</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% if shopping_lists %}
+    <div class="flex justify-center gap-6">
+        <div class="mt-6 flex justify-center">
+            <button type="submit" class="px-5 py-3 rounded-xl bg-white hover:bg-teal-700">
+                Get PDF
+            </button>
+        </div>
+        <div class="mt-6 flex justify-center">
+            <button name='get_all' type="submit" class="px-5 py-3 rounded-xl bg-white hover:bg-teal-700">
+                Get All Ingredients
+            </button>
+        </div>
+    </div>
+    {% else %}
+        <div class="flex justify-center">
+        <div class="px-2 py-1 bg-white rounded-xl">
+        Seems you do not have any shopping lists. Add some trough recipes.
+        </div>
+        </div>
+    {% endif %}
+
+    </form>
+{% endblock %}
